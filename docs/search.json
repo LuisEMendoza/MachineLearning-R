@@ -1,0 +1,9 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Inicio",
+    "section": "",
+    "text": "En estos apuntes estaré escribiendo todo lo que vaya encontrando en la red sobre el Aprendizaje Máquina con el lenguaje R. Planifico crear otro sitio con apuntes sobre Python, Julia y probablemente Java.\nEl código R se muestra abajo y enseguida la salida.\n\n1 + 1\n\n[1] 2\n\n\nConforme se vuelvan más complejos estos apuntes iré agregando métodos más eficientes de navegación."
+  }
+]

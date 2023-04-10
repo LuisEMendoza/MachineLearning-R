@@ -1,0 +1,11 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  navbar:
+    background: primary
+    search: true
+    left:
+      - text: "Inicio"
+        file: index.qmd
