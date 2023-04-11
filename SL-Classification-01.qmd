@@ -8,13 +8,13 @@ editor: visual
 
 Se trata de algortimos que utilizan la cercanía en cuanto a ciertos valores de las variables consideradas importantes para realizar una clasificación.
 
-### Reconociendo señales viales con kNN
+### Reconociendo señales viales con kNN {#reconociendo-señales-viales-con-knn}
 
 Después de haber tenido un humano detrás del volante por varios viajes, es hora de que el coche autónomo intente probarse a sí mismo.
 
 Al comienzo del viaje, la cámara obtiene la imagen de una señal vial de alto. Apliquemos un clasificador kNN para ayudar al coche a reconocer la señal.
 
-Carguemos tanto la librería `class` como el set de datos `signs`, el cual contiene las observaciones que queremos clasificar. Lo primero lo realizamos de la manera habitual:
+Carguemos tanto la librería `class` como el set de datos `signs`, el cual contiene las observaciones de entrenamiento. Lo primero lo realizamos de la manera habitual:
 
 ```{r}
 library(class)
@@ -23,8 +23,29 @@ library(class)
 Lo segundo lo haremos de una manera diferente, ya que nuestros datos se encuentran en un archivo de texto independiente de RStudio. Utilizaremos `read.csv()` para leer el contenido del archivo que contiene nuestro set de datos.
 
 ```{r}
-signs <- read.csv("signs.csv")
-signs
+signs <- read.csv("Datasets/signs.csv")
 ```
 
-mediante una variable a la cual le asignaremos el contenido de la columna `sign_type` contenida en el conjunto de datos `signs`. Recordemos que la selección de una columna se consigue con el símbolo `$`, indicando el set original y en seguida la columna de interés:
+Guardaremos la lectura a una variable `signs`, que nos representará en los sucesivo al conjunto de datos. Ahora crearemos un vector de etiquetas, al cual le asignaremos el contenido de la columna `sign_type` contenida en el conjunto de datos `signs`. Recordemos que la selección de una columna se consigue con el símbolo `$`, indicando el set original y en seguida la columna de interés:
+
+```{r}
+sign_types <- signs$sign_type
+```
+
+Ahora cargaremos los datos que representan la imagen tomada que queremos clasificar:
+
+```{r}
+next_sign <- read.csv("Datasets/next_sign.csv")
+```
+
+Es momento de realizar la clasificación de la nueva imagen con la función `knn()`. Configuraremos sus argumentos de la siguiente manera.
+
+-   `train` se refiere a los datos de entrenamiento o de ejemplo, y en este caso será igual al *data frame* `signs` pero retirando la columna de las etiquetas (recordemos que esa la usamos para el vector de etiquetas `sign_types`).
+
+-   El argumento `test` se refiere a los datos que se desean clasificar. Utilizaremos los correspondientes al *data frame* `next_sign`.
+
+-   El último argumento a utilizar será `cl`, al cual le alimentaremos el vector de etiquetas `sign_types`.
+
+```{r}
+knn(train = signs[, -1], test = next_sign, cl = sign_types)
+```

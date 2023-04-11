@@ -18,6 +18,6 @@ Conforme se vuelvan más complejos estos apuntes iré agregando métodos más ef
 
 Se debe instalar el paquete `class` con
 
-``` R
+``` r
 install.packages("class")
 ```
