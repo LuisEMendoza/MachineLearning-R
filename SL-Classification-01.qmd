@@ -20,7 +20,7 @@ Carguemos tanto la librería `class` como el set de datos `signs`, el cual conti
 library(class)
 ```
 
-Lo segundo lo haremos de una manera diferente, ya que nuestros datos se encuentran en un archivo de texto independiente de RStudio. Necesitamos asegurarnos de tener instalado el paquete/función `read.csv()`, ya que este es el que nos permite realizar la lectura desde archivos de texto.
+Lo segundo lo haremos de una manera diferente, ya que nuestros datos se encuentran en un archivo de texto independiente de RStudio. Utilizaremos `read.csv()` para leer el contenido del archivo que contiene nuestro set de datos.
 
 ```{r}
 signs <- read.csv("signs.csv")
