@@ -181,7 +181,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="reconociendo-señales-viales-con-knn" class="level3">
 <h3 class="anchored" data-anchor-id="reconociendo-señales-viales-con-knn">Reconociendo señales viales con kNN</h3>
 <p>Después de haber tenido un humano detrás del volante por varios viajes, es hora de que el coche autónomo intente probarse a sí mismo.</p>
-<p>Al comienzo del viaje, la cámara obtiene la imagen de una señal vial de alto. Apliquemos un clasificador kNN para ayudar al coche a reconocer la señal.</p>
+<p>Al comienzo del viaje, la cámara obtiene la imagen de una señal vial de alto. Esta se;al ha sido codificada siguiendo parámetros que pueden ser leidos por el algoritmo y se almacenan en un conjunto de datos llamado <code>next_sign</code>. Apliquemos un clasificador kNN para ayudar al coche a reconocer la señal.</p>
 <p>Carguemos tanto la librería <code>class</code> como el set de datos <code>signs</code>, el cual contiene las observaciones de entrenamiento. Lo primero lo realizamos de la manera habitual:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(class)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -209,6 +209,182 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] stop
 Levels: pedestrian speed stop</code></pre>
+</div>
+</div>
+<p>El resultado arrojado nos indica que efectivamente, es una señal de Alto. Luego nos muestra los posibles resultados a esta cuestión.</p>
+</section>
+<section id="explorando-los-datos-de-las-señales" class="level3">
+<h3 class="anchored" data-anchor-id="explorando-los-datos-de-las-señales">Explorando los datos de las señales</h3>
+<p>Hemos conseguido enseñarle a la máquina a reconocer una señal de alto. Sin embargo, debemos conocer qué información le dimos para lograrlo. Básicamente, el conjunto de datos que alimentamos como el entrenamiento contiene una simplificación numérica de las imágenes que representan señales viales. Veamos cómo se obtuvieron.</p>
+<p>Cada fotografía de señales viales fue dividida en una rejilla de 4x4, dando 16 partes representadas por cuadrados. Enseguida se extrajo el color del píxel central de cada uno de estos cuadros. El color fue cuantificado considerando el nivel RGB, es decir, la cantidad de rojo, verde y azul de dicho píxel. Recordemos que los valores RGB van desde 0 hasta 255. Así se obtuvo el conjunto de entrenamiento, con hasta 48 valores representando cada fotografía de señales viales.</p>
+<p>Exploremos el set de datos. Primero el panorama general algo resumido con <code>str()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(signs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   205 obs. of  49 variables:
+ $ sign_type: chr  "pedestrian" "pedestrian" "pedestrian" "pedestrian" ...
+ $ r1       : int  155 142 57 22 169 75 136 118 149 13 ...
+ $ g1       : int  228 217 54 35 179 67 149 105 225 34 ...
+ $ b1       : int  251 242 50 41 170 60 157 69 241 28 ...
+ $ r2       : int  135 166 187 171 231 131 200 244 34 5 ...
+ $ g2       : int  188 204 201 178 254 89 203 245 45 21 ...
+ $ b2       : int  101 44 68 26 27 53 107 67 1 11 ...
+ $ r3       : int  156 142 51 19 97 214 150 132 155 123 ...
+ $ g3       : int  227 217 51 27 107 144 167 123 226 154 ...
+ $ b3       : int  245 242 45 29 99 75 134 12 238 140 ...
+ $ r4       : int  145 147 59 19 123 156 171 138 147 21 ...
+ $ g4       : int  211 219 62 27 147 169 218 123 222 46 ...
+ $ b4       : int  228 242 65 29 152 190 252 85 242 41 ...
+ $ r5       : int  166 164 156 42 221 67 171 254 170 36 ...
+ $ g5       : int  233 228 171 37 236 50 158 254 191 60 ...
+ $ b5       : int  245 229 50 3 117 36 108 92 113 26 ...
+ $ r6       : int  212 84 254 217 205 37 157 241 26 75 ...
+ $ g6       : int  254 116 255 228 225 36 186 240 37 108 ...
+ $ b6       : int  52 17 36 19 80 42 11 108 12 44 ...
+ $ r7       : int  212 217 211 221 235 44 26 254 34 13 ...
+ $ g7       : int  254 254 226 235 254 42 35 254 45 27 ...
+ $ b7       : int  11 26 70 20 60 44 10 99 19 25 ...
+ $ r8       : int  188 155 78 181 90 192 180 108 221 133 ...
+ $ g8       : int  229 203 73 183 110 131 211 106 249 163 ...
+ $ b8       : int  117 128 64 73 9 73 236 27 184 126 ...
+ $ r9       : int  170 213 220 237 216 123 129 135 226 83 ...
+ $ g9       : int  216 253 234 234 236 74 109 123 246 125 ...
+ $ b9       : int  120 51 59 44 66 22 73 40 59 19 ...
+ $ r10      : int  211 217 254 251 229 36 161 254 30 13 ...
+ $ g10      : int  254 255 255 254 255 34 190 254 40 27 ...
+ $ b10      : int  3 21 51 2 12 37 10 115 34 25 ...
+ $ r11      : int  212 217 253 235 235 44 161 254 34 9 ...
+ $ g11      : int  254 255 255 243 254 42 190 254 44 23 ...
+ $ b11      : int  19 21 44 12 60 44 6 99 35 18 ...
+ $ r12      : int  172 158 66 19 163 197 187 138 241 85 ...
+ $ g12      : int  235 225 68 27 168 114 215 123 255 128 ...
+ $ b12      : int  244 237 68 29 152 21 236 85 54 21 ...
+ $ r13      : int  172 164 69 20 124 171 141 118 205 83 ...
+ $ g13      : int  235 227 65 29 117 102 142 105 229 125 ...
+ $ b13      : int  244 237 59 34 91 26 140 75 46 19 ...
+ $ r14      : int  172 182 76 64 188 197 189 131 226 85 ...
+ $ g14      : int  228 228 84 61 205 114 171 124 246 128 ...
+ $ b14      : int  235 143 22 4 78 21 140 5 59 21 ...
+ $ r15      : int  177 171 82 211 125 123 214 106 235 85 ...
+ $ g15      : int  235 228 93 222 147 74 221 94 252 128 ...
+ $ b15      : int  244 196 17 78 20 22 201 53 67 21 ...
+ $ r16      : int  22 164 58 19 160 180 188 101 237 83 ...
+ $ g16      : int  52 227 60 27 183 107 211 91 254 125 ...
+ $ b16      : int  53 237 60 29 187 26 227 59 53 19 ...</code></pre>
+</div>
+</div>
+<p>Supongamos que deseamos saber cuántas señales de cada tipo están contenidas en nuestros datos. Eso se consigue con la función <code>table()</code> con la columna de los tipos de señal como argumento (no olvidemos que es la primera columna).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(signs[, <span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+pedestrian      speed       stop 
+        65         70         70 </code></pre>
+</div>
+</div>
+<p>Es posible revisar los niveles promedio de color de alguna columna específica con el comando <code>aggregate()</code>. Calculemos el promedio de color del décimo cuadro pero clasificado por tipo de señal:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">aggregate</span>(r10 <span class="sc">~</span> sign_type, <span class="at">data =</span> signs, mean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   sign_type       r10
+1 pedestrian 108.78462
+2      speed  83.08571
+3       stop 141.08571</code></pre>
+</div>
+</div>
+<p>Desglosemos esta función. El primer argumento es la forma de organizar los datos, la columna r10 con respecto a la que que contiene los nombres del tipo de señal; enseguida escribimos el nombre del conjunto de datos y al final cuál medida estadística deseamos calcular.</p>
+</section>
+<section id="clasificando-un-conjunto-de-señales-viales" class="level3">
+<h3 class="anchored" data-anchor-id="clasificando-un-conjunto-de-señales-viales">Clasificando un conjunto de señales viales</h3>
+<p>Ahora realizaremos una prueba de manejo que incluye 59 señales adicionales divididas en tres categorías: alto, límite de velocidad y paso peatonal. Al final de la prueba, debemos medir el nivel de éxito del coche en reconocer dichas señales. Seguiremos trabajando con nuestro conjunto de datos con la adición de los datos de prueba, llamados <code>test_signs</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>test_signs <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"Datasets/test_signs.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Clasifiquemos los datos de las señales de prueba con <code>knn()</code> y asignemos el resultado a una variable.</p>
+<ul>
+<li><p><code>train</code> volverá a ser nuestros datos de entrenamiento sin etiquetas.</p></li>
+<li><p><code>test</code> se refiere ahora a los datos de prueba <code>test_signs</code>, también sin etiquetas.</p></li>
+<li><p><code>cl</code> vuelve a ser el vector de etiquetas creado anteriormente.</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>sign_types <span class="ot">&lt;-</span> signs<span class="sc">$</span>sign_type</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>signs_pred <span class="ot">&lt;-</span> <span class="fu">knn</span>(<span class="at">train =</span> signs[, <span class="sc">-</span><span class="dv">1</span>], <span class="at">test =</span> test_signs[, <span class="sc">-</span><span class="dv">1</span>], <span class="at">cl =</span> sign_types)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>signs_pred</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] pedestrian pedestrian pedestrian pedestrian pedestrian pedestrian
+ [7] pedestrian pedestrian pedestrian pedestrian pedestrian pedestrian
+[13] pedestrian pedestrian pedestrian pedestrian pedestrian pedestrian
+[19] pedestrian speed      speed      speed      speed      speed     
+[25] speed      speed      speed      speed      speed      speed     
+[31] speed      speed      speed      speed      speed      speed     
+[37] speed      speed      speed      speed      stop       stop      
+[43] stop       stop       stop       stop       stop       stop      
+[49] stop       stop       stop       stop       stop       stop      
+[55] stop       stop       stop       stop       stop      
+Levels: pedestrian speed stop</code></pre>
+</div>
+</div>
+<p>R nos devuelve el conjunto de sus lecturas en cuanto a las señales viales que encontró en la prueba. Toca verificar qué tan preciso resultó ser nuestro modelo con respecto a las señales reales. Para ello, primero crearemos un vector con las etiquetas de las señales reales y después con la función <code>table()</code> crearemos una tabla cruzada o matriz de confusión que compare los valores pronosticados contra los reales:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>signs_actual <span class="ot">&lt;-</span> test_signs<span class="sc">$</span>sign_type</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>signs_actual</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "pedestrian" "pedestrian" "pedestrian" "pedestrian" "pedestrian"
+ [6] "pedestrian" "pedestrian" "pedestrian" "pedestrian" "pedestrian"
+[11] "pedestrian" "pedestrian" "pedestrian" "pedestrian" "pedestrian"
+[16] "pedestrian" "pedestrian" "pedestrian" "pedestrian" "speed"     
+[21] "speed"      "speed"      "speed"      "speed"      "speed"     
+[26] "speed"      "speed"      "speed"      "speed"      "speed"     
+[31] "speed"      "speed"      "speed"      "speed"      "speed"     
+[36] "speed"      "speed"      "speed"      "speed"      "speed"     
+[41] "stop"       "stop"       "stop"       "stop"       "stop"      
+[46] "stop"       "stop"       "stop"       "stop"       "stop"      
+[51] "stop"       "stop"       "stop"       "stop"       "stop"      
+[56] "stop"       "stop"       "stop"       "stop"      </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(signs_pred, signs_actual)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            signs_actual
+signs_pred   pedestrian speed stop
+  pedestrian         19     0    0
+  speed               0    21    0
+  stop                0     0   19</code></pre>
+</div>
+</div>
+<p>Calculemos la precisión de nuestro modelo:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(signs_pred <span class="sc">==</span> signs_actual)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1</code></pre>
+</div>
+</div>
+<p>Resultó ser totalmente preciso, lo cual no es normal que ocurra siempre.</p>
+</section>
+<section id="probando-otros-valores-de-k" class="level3">
+<h3 class="anchored" data-anchor-id="probando-otros-valores-de-k">Probando otros valores de k</h3>
+<p>El valor de la constante <em>k</em> permite modificar el rendimiento de nuestros algoritmos. La <em>k</em> se refiere al número de vecinos a tomar en cuenta para la clasificación. Por ejemplo, si lo dejamos sin modificar, R dará un valor de <em>k = 1</em>, por lo que elegirá solo la imagen más cercana a la prueba. Si incrementamos el valor, se tomará en cuenta tantos vecinos como valga la <em>k</em> y eso podría redundar en una mayor exactitud del modelo al tener más elementos que considerar. Sin embargo, esto no siempre es lo mejor, ya que valores pequeños pueden detectar patrones más sutiles en nuestro modelo.</p>
+<p>Probemos valores de <em>k</em> a 1, 7 y 25 para examinar su impacto en la exactitud del modelo de aprendizaje:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>k_1 <span class="ot">&lt;-</span> <span class="fu">knn</span>(<span class="at">train =</span> signs[, <span class="sc">-</span><span class="dv">1</span>], <span class="at">test =</span> test_signs[, <span class="sc">-</span><span class="dv">1</span>], <span class="at">cl =</span> sign_types)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(signs_actual <span class="sc">==</span> k_1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1</code></pre>
+</div>
+</div>
+<p>Ahora probemos con 7 vecinos.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>k_7 <span class="ot">&lt;-</span> <span class="fu">knn</span>(<span class="at">train =</span> signs[, <span class="sc">-</span><span class="dv">1</span>], <span class="at">test =</span> test_signs[, <span class="sc">-</span><span class="dv">1</span>], <span class="at">cl =</span> sign_types, <span class="at">k =</span> <span class="dv">7</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(signs_actual <span class="sc">==</span> k_7)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9661017</code></pre>
+</div>
+</div>
+<p>Y con 25:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>k_25 <span class="ot">&lt;-</span> <span class="fu">knn</span>(<span class="at">train =</span> signs[, <span class="sc">-</span><span class="dv">1</span>], <span class="at">test =</span> test_signs[, <span class="sc">-</span><span class="dv">1</span>], <span class="at">cl =</span> sign_types, <span class="at">k =</span> <span class="dv">25</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(signs_actual <span class="sc">==</span> k_25)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9322034</code></pre>
 </div>
 </div>
 

@@ -12,7 +12,7 @@ Se trata de algortimos que utilizan la cercanía en cuanto a ciertos valores de 
 
 Después de haber tenido un humano detrás del volante por varios viajes, es hora de que el coche autónomo intente probarse a sí mismo.
 
-Al comienzo del viaje, la cámara obtiene la imagen de una señal vial de alto. Apliquemos un clasificador kNN para ayudar al coche a reconocer la señal.
+Al comienzo del viaje, la cámara obtiene la imagen de una señal vial de alto. Esta se;al ha sido codificada siguiendo parámetros que pueden ser leidos por el algoritmo y se almacenan en un conjunto de datos llamado `next_sign`. Apliquemos un clasificador kNN para ayudar al coche a reconocer la señal.
 
 Carguemos tanto la librería `class` como el set de datos `signs`, el cual contiene las observaciones de entrenamiento. Lo primero lo realizamos de la manera habitual:
 
@@ -48,4 +48,95 @@ Es momento de realizar la clasificación de la nueva imagen con la función `knn
 
 ```{r}
 knn(train = signs[, -1], test = next_sign, cl = sign_types)
+```
+
+El resultado arrojado nos indica que efectivamente, es una señal de Alto. Luego nos muestra los posibles resultados a esta cuestión.
+
+### Explorando los datos de las señales
+
+Hemos conseguido enseñarle a la máquina a reconocer una señal de alto. Sin embargo, debemos conocer qué información le dimos para lograrlo. Básicamente, el conjunto de datos que alimentamos como el entrenamiento contiene una simplificación numérica de las imágenes que representan señales viales. Veamos cómo se obtuvieron.
+
+Cada fotografía de señales viales fue dividida en una rejilla de 4x4, dando 16 partes representadas por cuadrados. Enseguida se extrajo el color del píxel central de cada uno de estos cuadros. El color fue cuantificado considerando el nivel RGB, es decir, la cantidad de rojo, verde y azul de dicho píxel. Recordemos que los valores RGB van desde 0 hasta 255. Así se obtuvo el conjunto de entrenamiento, con hasta 48 valores representando cada fotografía de señales viales.
+
+Exploremos el set de datos. Primero el panorama general algo resumido con `str()`:
+
+```{r}
+str(signs)
+```
+
+Supongamos que deseamos saber cuántas señales de cada tipo están contenidas en nuestros datos. Eso se consigue con la función `table()` con la columna de los tipos de señal como argumento (no olvidemos que es la primera columna).
+
+```{r}
+table(signs[, 1])
+```
+
+Es posible revisar los niveles promedio de color de alguna columna específica con el comando `aggregate()`. Calculemos el promedio de color del décimo cuadro pero clasificado por tipo de señal:
+
+```{r}
+aggregate(r10 ~ sign_type, data = signs, mean)
+```
+
+Desglosemos esta función. El primer argumento es la forma de organizar los datos, la columna r10 con respecto a la que que contiene los nombres del tipo de señal; enseguida escribimos el nombre del conjunto de datos y al final cuál medida estadística deseamos calcular.
+
+### Clasificando un conjunto de señales viales
+
+Ahora realizaremos una prueba de manejo que incluye 59 señales adicionales divididas en tres categorías: alto, límite de velocidad y paso peatonal. Al final de la prueba, debemos medir el nivel de éxito del coche en reconocer dichas señales. Seguiremos trabajando con nuestro conjunto de datos con la adición de los datos de prueba, llamados `test_signs`.
+
+```{r}
+test_signs <- read.csv("Datasets/test_signs.csv")
+```
+
+Clasifiquemos los datos de las señales de prueba con `knn()` y asignemos el resultado a una variable.
+
+-   `train` volverá a ser nuestros datos de entrenamiento sin etiquetas.
+
+-   `test` se refiere ahora a los datos de prueba `test_signs`, también sin etiquetas.
+
+-   `cl` vuelve a ser el vector de etiquetas creado anteriormente.
+
+```{r}
+sign_types <- signs$sign_type
+signs_pred <- knn(train = signs[, -1], test = test_signs[, -1], cl = sign_types)
+signs_pred
+```
+
+R nos devuelve el conjunto de sus lecturas en cuanto a las señales viales que encontró en la prueba. Toca verificar qué tan preciso resultó ser nuestro modelo con respecto a las señales reales. Para ello, primero crearemos un vector con las etiquetas de las señales reales y después con la función `table()` crearemos una tabla cruzada o matriz de confusión que compare los valores pronosticados contra los reales:
+
+```{r}
+signs_actual <- test_signs$sign_type
+signs_actual
+table(signs_pred, signs_actual)
+```
+
+Calculemos la precisión de nuestro modelo:
+
+```{r}
+mean(signs_pred == signs_actual)
+```
+
+Resultó ser totalmente preciso, lo cual no es normal que ocurra siempre.
+
+### Probando otros valores de k
+
+El valor de la constante *k* permite modificar el rendimiento de nuestros algoritmos. La *k* se refiere al número de vecinos a tomar en cuenta para la clasificación. Por ejemplo, si lo dejamos sin modificar, R dará un valor de *k = 1*, por lo que elegirá solo la imagen más cercana a la prueba. Si incrementamos el valor, se tomará en cuenta tantos vecinos como valga la *k* y eso podría redundar en una mayor exactitud del modelo al tener más elementos que considerar. Sin embargo, esto no siempre es lo mejor, ya que valores pequeños pueden detectar patrones más sutiles en nuestro modelo.
+
+Probemos valores de *k* a 1, 7 y 25 para examinar su impacto en la exactitud del modelo de aprendizaje:
+
+```{r}
+k_1 <- knn(train = signs[, -1], test = test_signs[, -1], cl = sign_types)
+mean(signs_actual == k_1)
+```
+
+Ahora probemos con 7 vecinos.
+
+```{r}
+k_7 <- knn(train = signs[, -1], test = test_signs[, -1], cl = sign_types, k = 7)
+mean(signs_actual == k_7)
+```
+
+Y con 25:
+
+```{r}
+k_25 <- knn(train = signs[, -1], test = test_signs[, -1], cl = sign_types, k = 25)
+mean(signs_actual == k_25)
 ```
