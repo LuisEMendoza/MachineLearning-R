@@ -15,3 +15,9 @@ El código R se muestra abajo y enseguida la salida.
 ```
 
 Conforme se vuelvan más complejos estos apuntes iré agregando métodos más eficientes de navegación.
+
+Se debe instalar el paquete `class` con
+
+``` R
+install.packages("class")
+```

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Inicio</title>
+<title>Aprendizaje Supervisado en R: Clasificación</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -137,11 +137,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page">
+    <a class="nav-link" href="./index.html">
  <span class="menu-text">Inicio</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./SL-Classification-01.html">
+    <a class="nav-link active" href="./SL-Classification-01.html" aria-current="page">
  <span class="menu-text">Clasificación</span></a>
   </li>  
 </ul>
@@ -160,7 +160,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Inicio</h1>
+<h1 class="title">Aprendizaje Supervisado en R: Clasificación</h1>
 </div>
 
 
@@ -176,18 +176,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </header>
 
 <section id="quarto" class="level2">
-<h2 class="anchored" data-anchor-id="quarto">Apuntes sobre Machine Learning con R</h2>
-<p>En estos apuntes estaré escribiendo todo lo que vaya encontrando en la red sobre el Aprendizaje Máquina con el lenguaje R. Planifico crear otro sitio con apuntes sobre Python, Julia y probablemente Java.</p>
-<p>El código R se muestra abajo y enseguida la salida.</p>
+<h2 class="anchored" data-anchor-id="quarto">Vecinos cercanos (kNN)</h2>
+<p>Se trata de algortimos que utilizan la cercanía en cuanto a ciertos valores de las variables consideradas importantes para realizar una clasificación.</p>
+<section id="reconociendo-señales-viales-con-knn" class="level3">
+<h3 class="anchored" data-anchor-id="reconociendo-señales-viales-con-knn">Reconociendo señales viales con kNN</h3>
+<p>Después de haber tenido un humano detrás del volante por varios viajes, es hora de que el coche autónomo intente probarse a sí mismo.</p>
+<p>Al comienzo del viaje, la cámara obtiene la imagen de una señal vial de alto. Apliquemos un clasificador kNN para ayudar al coche a reconocer la señal.</p>
+<p>Carguemos tanto la librería <code>class</code> como el set de datos <code>signs</code>, el cual contiene las observaciones que queremos clasificar. Lo primero lo realizamos de la manera habitual:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">+</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 2</code></pre>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(class)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>Lo segundo lo haremos de una manera diferente, ya que nuestros datos se encuentran en un archivo de texto independiente de RStudio. Necesitamos asegurarnos de tener instalado el paquete/función <code>read.csv()</code>, ya que este es el que nos permite realizar la lectura desde archivos de texto.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>signs <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"signs.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Conforme se vuelvan más complejos estos apuntes iré agregando métodos más eficientes de navegación.</p>
+<p>mediante una variable a la cual le asignaremos el contenido de la columna <code>sign_type</code> contenida en el conjunto de datos <code>signs</code>. Recordemos que la selección de una columna se consigue con el símbolo <code>$</code>, indicando el set original y en seguida la columna de interés:</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

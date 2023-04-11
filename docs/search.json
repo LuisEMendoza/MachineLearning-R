@@ -5,5 +5,12 @@
     "title": "Inicio",
     "section": "",
     "text": "En estos apuntes estaré escribiendo todo lo que vaya encontrando en la red sobre el Aprendizaje Máquina con el lenguaje R. Planifico crear otro sitio con apuntes sobre Python, Julia y probablemente Java.\nEl código R se muestra abajo y enseguida la salida.\n\n1 + 1\n\n[1] 2\n\n\nConforme se vuelvan más complejos estos apuntes iré agregando métodos más eficientes de navegación."
+  },
+  {
+    "objectID": "SL-Classification-01.html",
+    "href": "SL-Classification-01.html",
+    "title": "Aprendizaje Supervisado en R: Clasificación",
+    "section": "",
+    "text": "Se trata de algortimos que utilizan la cercanía en cuanto a ciertos valores de las variables consideradas importantes para realizar una clasificación.\n\n\nDespués de haber tenido un humano detrás del volante por varios viajes, es hora de que el coche autónomo intente probarse a sí mismo.\nAl comienzo del viaje, la cámara obtiene la imagen de una señal vial de alto. Apliquemos un clasificador kNN para ayudar al coche a reconocer la señal.\nCarguemos tanto la librería class como el set de datos signs, el cual contiene las observaciones que queremos clasificar. Lo primero lo realizamos de la manera habitual:\n\nlibrary(class)\n\nLo segundo lo haremos de una manera diferente, ya que nuestros datos se encuentran en un archivo de texto independiente de RStudio. Necesitamos asegurarnos de tener instalado el paquete/función read.csv(), ya que este es el que nos permite realizar la lectura desde archivos de texto.\n\nsigns <- read.csv(\"signs.csv\")\n\nmediante una variable a la cual le asignaremos el contenido de la columna sign_type contenida en el conjunto de datos signs. Recordemos que la selección de una columna se consigue con el símbolo $, indicando el set original y en seguida la columna de interés:"
   }
 ]

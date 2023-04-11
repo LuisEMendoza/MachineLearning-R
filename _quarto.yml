@@ -9,3 +9,5 @@ website:
     left:
       - text: "Inicio"
         file: index.qmd
+      - text: "Clasificación"
+        file: SL-Classification-01.qmd

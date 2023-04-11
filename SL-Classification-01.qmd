@@ -1,0 +1,29 @@
+---
+title: "Aprendizaje Supervisado en R: Clasificación"
+format: html
+editor: visual
+---
+
+## Vecinos cercanos (kNN) {#quarto}
+
+Se trata de algortimos que utilizan la cercanía en cuanto a ciertos valores de las variables consideradas importantes para realizar una clasificación.
+
+### Reconociendo señales viales con kNN
+
+Después de haber tenido un humano detrás del volante por varios viajes, es hora de que el coche autónomo intente probarse a sí mismo.
+
+Al comienzo del viaje, la cámara obtiene la imagen de una señal vial de alto. Apliquemos un clasificador kNN para ayudar al coche a reconocer la señal.
+
+Carguemos tanto la librería `class` como el set de datos `signs`, el cual contiene las observaciones que queremos clasificar. Lo primero lo realizamos de la manera habitual:
+
+```{r}
+library(class)
+```
+
+Lo segundo lo haremos de una manera diferente, ya que nuestros datos se encuentran en un archivo de texto independiente de RStudio. Necesitamos asegurarnos de tener instalado el paquete/función `read.csv()`, ya que este es el que nos permite realizar la lectura desde archivos de texto.
+
+```{r}
+signs <- read.csv("signs.csv")
+```
+
+mediante una variable a la cual le asignaremos el contenido de la columna `sign_type` contenida en el conjunto de datos `signs`. Recordemos que la selección de una columna se consigue con el símbolo `$`, indicando el set original y en seguida la columna de interés:
