@@ -384,7 +384,34 @@ signs_pred   pedestrian speed stop
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>k_25 <span class="ot">&lt;-</span> <span class="fu">knn</span>(<span class="at">train =</span> signs[, <span class="sc">-</span><span class="dv">1</span>], <span class="at">test =</span> test_signs[, <span class="sc">-</span><span class="dv">1</span>], <span class="at">cl =</span> sign_types, <span class="at">k =</span> <span class="dv">25</span>)</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(signs_actual <span class="sc">==</span> k_25)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.9322034</code></pre>
+<pre><code>[1] 0.9491525</code></pre>
+</div>
+</div>
+</section>
+<section id="viendo-cómo-los-vecinos-se-votaron" class="level3">
+<h3 class="anchored" data-anchor-id="viendo-cómo-los-vecinos-se-votaron">Viendo cómo los vecinos se votaron</h3>
+<p>Cuando múltiples vecinos más cercanos obtienen un voto, puede ser útil en ocasiones examinar si los votos fueron unánimes o dispersos. Por ejemplo, saber más acerca de la seguridad con que se realizaron los votos podría permitirle a un vehículo autónomo tener precaución por si existe la posibilidad de toparse una señal de alto enfrente.</p>
+<p>En este ejercicio veremos cómo obtener los resultados de la votación a partir de la función <code>knn()</code>.</p>
+<p>Usaremos una <em>k = 7</em> y los datos ya conocidos, con la salvedad de agregar un argumento más, <code>prob = TRUE</code>. El resultado lo asignamos a una variable</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>sign_pred2 <span class="ot">&lt;-</span> <span class="fu">knn</span>(<span class="at">train =</span> signs[, <span class="sc">-</span><span class="dv">1</span>], <span class="at">test =</span> test_signs[, <span class="sc">-</span><span class="dv">1</span>], <span class="at">cl =</span> sign_types, <span class="at">k =</span> <span class="dv">7</span>, <span class="at">prob =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>La función que nos permite obtener las proporciones de los votos es <code>attr()</code>, dándole como argumentos la variable obtenida antes y el atributo <code>"prob"</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>sign_prob <span class="ot">&lt;-</span> <span class="fu">attr</span>(sign_pred2, <span class="st">"prob"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Ahora examinemos los resultados de nuestra predicción y la proporción de votos para la clase ganadora:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sign_pred2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] pedestrian pedestrian pedestrian stop       pedestrian pedestrian
+Levels: pedestrian speed stop</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sign_prob)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.5714286 0.7142857 0.8571429 0.4285714 1.0000000 0.8571429</code></pre>
 </div>
 </div>
 

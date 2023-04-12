@@ -140,3 +140,31 @@ Y con 25:
 k_25 <- knn(train = signs[, -1], test = test_signs[, -1], cl = sign_types, k = 25)
 mean(signs_actual == k_25)
 ```
+
+### Viendo cómo los vecinos se votaron
+
+Cuando múltiples vecinos más cercanos obtienen un voto, puede ser útil en ocasiones examinar si los votos fueron unánimes o dispersos. Por ejemplo, saber más acerca de la seguridad con que se realizaron los votos podría permitirle a un vehículo autónomo tener precaución por si existe la posibilidad de toparse una señal de alto enfrente.
+
+En este ejercicio veremos cómo obtener los resultados de la votación a partir de la función `knn()`.
+
+Usaremos una *k = 7* y los datos ya conocidos, con la salvedad de agregar un argumento más, `prob = TRUE`. El resultado lo asignamos a una variable
+
+```{r}
+sign_pred2 <- knn(train = signs[, -1], test = test_signs[, -1], cl = sign_types, k = 7, prob = TRUE)
+```
+
+La función que nos permite obtener las proporciones de los votos es `attr()`, dándole como argumentos la variable obtenida antes y el atributo `"prob"`.
+
+```{r}
+sign_prob <- attr(sign_pred2, "prob")
+```
+
+Ahora examinemos los resultados de nuestra predicción y la proporción de votos para la clase ganadora:
+
+```{r}
+head(sign_pred2)
+```
+
+```{r}
+head(sign_prob)
+```
