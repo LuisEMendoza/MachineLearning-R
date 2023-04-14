@@ -1,0 +1,24 @@
+---
+title: "Adquisición de datos"
+format: html
+editor: visual
+---
+
+## Introducción
+
+Es importante saber dónde encontrar y preparar los datos. Es posible obtenerlos en archivos *CSV* o *JSON*, pero eso no nos exime de tener que prepararlos o adecuarlos para aplicar algún modelo. Veamos cómo extraer los datos a partir de un *csv*.
+
+## Extrayendo un *csv*
+
+Trabajaremos con datos que ya están disponibles en el propio *R* (es el de `mtcars`), pero ahora como si fueran externos. Para ello extraeremos los valores desde un archivo de texto en formato *csv* y mostraremos un breve resumen del mismo con la función `head()`. Dicho archivo se encuentra en la carpeta de Datasets del repositorio.
+
+```{r}
+autos <- read.csv(file = "Datasets/auto-mpg.csv", header = TRUE, sep = ",")
+head(autos)
+```
+
+La función que utilizamos `read.csv()` admite algunos parámetros. Los que nos importan de momento son los que se pueden ver en el bloque de código anterior:
+
+1.  `file =`. El archivo que se va a leer entrecomillado.
+2.  `header =`. Si el archivo contiene cabecera, lo dejamos en `TRUE`.
+3.  `sep =`. El tipo de separador, que usualmente es una coma "`,`".

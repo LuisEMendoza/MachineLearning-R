@@ -52,7 +52,7 @@ knn(train = signs[, -1], test = next_sign, cl = sign_types)
 
 El resultado arrojado nos indica que efectivamente, es una señal de Alto. Luego nos muestra los posibles resultados a esta cuestión.
 
-### Explorando los datos de las señales
+### Explorando los datos de las señales {#explorando-los-datos-de-las-señales}
 
 Hemos conseguido enseñarle a la máquina a reconocer una señal de alto. Sin embargo, debemos conocer qué información le dimos para lograrlo. Básicamente, el conjunto de datos que alimentamos como el entrenamiento contiene una simplificación numérica de las imágenes que representan señales viales. Veamos cómo se obtuvieron.
 
@@ -78,7 +78,7 @@ aggregate(r10 ~ sign_type, data = signs, mean)
 
 Desglosemos esta función. El primer argumento es la forma de organizar los datos, la columna r10 con respecto a la que que contiene los nombres del tipo de señal; enseguida escribimos el nombre del conjunto de datos y al final cuál medida estadística deseamos calcular.
 
-### Clasificando un conjunto de señales viales
+### Clasificando un conjunto de señales viales {#clasificando-un-conjunto-de-señales-viales}
 
 Ahora realizaremos una prueba de manejo que incluye 59 señales adicionales divididas en tres categorías: alto, límite de velocidad y paso peatonal. Al final de la prueba, debemos medir el nivel de éxito del coche en reconocer dichas señales. Seguiremos trabajando con nuestro conjunto de datos con la adición de los datos de prueba, llamados `test_signs`.
 
@@ -116,7 +116,7 @@ mean(signs_pred == signs_actual)
 
 Resultó ser totalmente preciso, lo cual no es normal que ocurra siempre.
 
-### Probando otros valores de k
+### Probando otros valores de k {#probando-otros-valores-de-k}
 
 El valor de la constante *k* permite modificar el rendimiento de nuestros algoritmos. La *k* se refiere al número de vecinos a tomar en cuenta para la clasificación. Por ejemplo, si lo dejamos sin modificar, R dará un valor de *k = 1*, por lo que elegirá solo la imagen más cercana a la prueba. Si incrementamos el valor, se tomará en cuenta tantos vecinos como valga la *k* y eso podría redundar en una mayor exactitud del modelo al tener más elementos que considerar. Sin embargo, esto no siempre es lo mejor, ya que valores pequeños pueden detectar patrones más sutiles en nuestro modelo.
 
@@ -141,7 +141,7 @@ k_25 <- knn(train = signs[, -1], test = test_signs[, -1], cl = sign_types, k = 2
 mean(signs_actual == k_25)
 ```
 
-### Viendo cómo los vecinos se votaron
+### Viendo cómo los vecinos se votaron {#viendo-cómo-los-vecinos-se-votaron}
 
 Cuando múltiples vecinos más cercanos obtienen un voto, puede ser útil en ocasiones examinar si los votos fueron unánimes o dispersos. Por ejemplo, saber más acerca de la seguridad con que se realizaron los votos podría permitirle a un vehículo autónomo tener precaución por si existe la posibilidad de toparse una señal de alto enfrente.
 

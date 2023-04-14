@@ -384,7 +384,7 @@ signs_pred   pedestrian speed stop
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>k_25 <span class="ot">&lt;-</span> <span class="fu">knn</span>(<span class="at">train =</span> signs[, <span class="sc">-</span><span class="dv">1</span>], <span class="at">test =</span> test_signs[, <span class="sc">-</span><span class="dv">1</span>], <span class="at">cl =</span> sign_types, <span class="at">k =</span> <span class="dv">25</span>)</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(signs_actual <span class="sc">==</span> k_25)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.9491525</code></pre>
+<pre><code>[1] 0.9322034</code></pre>
 </div>
 </div>
 </section>
