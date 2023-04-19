@@ -11,3 +11,5 @@ website:
         file: index.qmd
       - text: "Clasificación"
         file: SL-Classification-01.qmd
+      - text: "Adquisición"
+        file: DataAdquisition-01.qmd

@@ -10,15 +10,108 @@ Es importante saber dónde encontrar y preparar los datos. Es posible obtenerlos
 
 ## Extrayendo un *csv*
 
-Trabajaremos con datos que ya están disponibles en el propio *R* (es el de `mtcars`), pero ahora como si fueran externos. Para ello extraeremos los valores desde un archivo de texto en formato *csv* y mostraremos un breve resumen del mismo con la función `head()`. Dicho archivo se encuentra en la carpeta de Datasets del repositorio.
+Trabajaremos con datos que ya están disponibles en el propio *R* (es el de `mtcars`), pero ahora como si fueran externos. Para ello extraeremos los valores desde un archivo de texto en formato *csv* y mostraremos un breve resumen del mismo con la función `head()` con dos argumentos, el nombre de la variable y el número de filas que deseamos mostrar. Dicho archivo se encuentra en la carpeta de Datasets del repositorio.
 
 ```{r}
-autos <- read.csv(file = "Datasets/auto-mpg.csv", header = TRUE, sep = ",")
-head(autos)
+autos <- read.csv(file = "Datasets/Adquisition/auto-mpg.csv", header = TRUE, sep = ",")
+head(autos, 5)
 ```
 
 La función que utilizamos `read.csv()` admite algunos parámetros. Los que nos importan de momento son los que se pueden ver en el bloque de código anterior:
 
 1.  `file =`. El archivo que se va a leer entrecomillado.
-2.  `header =`. Si el archivo contiene cabecera, lo dejamos en `TRUE`.
-3.  `sep =`. El tipo de separador, que usualmente es una coma "`,`".
+2.  `header =`. Si el archivo contiene cabecera, lo dejamos con su valor por defecto, `TRUE`.
+3.  `sep =`. El tipo de separador, que usualmente es una coma ",".
+
+Si deseamos visualizar únicamente los nombres de las variables o columnas, utilizamos el comando:
+
+```{r}
+names(autos)
+```
+
+### Opciones adicionales
+
+Si en dado caso el separador es diferente, por ejemplo `";"`, utilizamos la función `read.csv2()`. Cabe mencionar que el separador *tabulador* puede representarse en *R* como `"t"`.
+
+Si nuestro conjunto de datos no tiene cabecera, hay que indicarlo con `header = FALSE`. Además, podemos agregar dicha cabecera utilizando el argumento `col.names = c("Nombre1", "Nombre2", "NombreTal")`
+
+Si nuestro set de datos contiene huecos, es posible darles un tratamiento específico con la sentencia `na.strings = ""`.
+
+Si queremos evitar que *R* trate a las variables categóricas como factores, lo especificamos con la sentencia `stringsAsFactors = FALSE`. Si queremos trabajarlas como cadenas de caracteres, utilizamos `as.character()`.
+
+Si queremos leer un archivo remoto, basta con usar la misma función pero cambiando la ruta por la url del archivo:
+
+```{r}
+autos_internet <- read.csv("https://raw.githubusercontent.com/LuisEMendoza/MachineLearning-R/main/Datasets/auto-mpg.csv")
+head(autos_internet, 5)
+```
+
+## Extrayendo un *xml*
+
+Es necesario instalar un paquete adicional en *R* llamado `XML`. Usamos la sentencia de costumbre
+
+``` R
+install.packages("XML")
+```
+
+Cargamos este paquete con
+
+```{r}
+library(XML)
+```
+
+Y leemos el archivo desde su ubicación local. Por ejemplo, el archivo a leer se encuentra en la ubicación local `Datasets/Adquisition/cd_catalog.xml`. Por simplicidad, asignaremos la ruta a una variable llamada UrlXml
+
+```{r}
+url_xml <- "Datasets/Adquisition/cd_catalog.xml"
+```
+
+Sin embargo, debemos crear un apuntador que nos permita hurgar en el archivo:
+
+```{r}
+xml_apuntador <- xmlParse(url_xml)
+apuntador_root <- xmlRoot(xml_apuntador)
+```
+
+Además de construir un *dataframe* con el mismo. Procedemos de la siguiente manera:
+
+```{r}
+xml_data <- xmlSApply(apuntador_root, function(x) xmlSApply(x, xmlValue))
+xml_dataframe <-  data.frame(t(xml_data), row.names = NULL)
+```
+
+Es importante notar que se traspuso el *dataframe* debido a que la estructura de los *xml* nos habr\[ia generado las variables como filas. Recordemos que siempre deseamos que las variables se encuentren en las columnas. También eliminamos los nombres de las filas con la sentencia `row.names = NULL`.
+
+Mostremos el resultado con al menos 5 valores.
+
+```{r}
+head(xml_dataframe, 5)
+```
+
+## Leyendo tablas de un *html*
+
+Procedemos de manera similar a los *xml*. Creamos una variable con la ubicación del archivo:
+
+```{r}
+url_html <- "Datasets/Adquisition/WorldPopulation-wiki.htm"
+```
+
+Extraemos las tablas con:
+
+```{r}
+tablas <- readHTMLTable(url_html)
+```
+
+Esto nos devuelve una lista con las tablas incrustadas en el archivo *html*. Si deseamos acceder a una lista en particular, por ejemplo, la 6; lo hacemos con el siguiente comando en una nueva variable llamada `tabla6`.
+
+```{r}
+tabla6 <- tablas[[6]]
+head(tabla6, 5)
+```
+
+Lo anterior se puede realizar un poco mejor si ya conocemos de antemano la tabla a cargar. Veamos:
+
+```{r}
+nueva_tabla6 <- readHTMLTable(url_html, which = 6)
+nueva_tabla6
+```

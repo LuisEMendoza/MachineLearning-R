@@ -144,6 +144,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <a class="nav-link" href="./SL-Classification-01.html">
  <span class="menu-text">Clasificación</span></a>
   </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./DataAdquisition-01.html" aria-current="page">
+ <span class="menu-text">Adquisición</span></a>
+  </li>  
 </ul>
               <div id="quarto-search" class="" title="Search"></div>
           </div> <!-- /navcollapse -->
@@ -181,10 +185,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="extrayendo-un-csv" class="level2">
 <h2 class="anchored" data-anchor-id="extrayendo-un-csv">Extrayendo un <em>csv</em></h2>
-<p>Trabajaremos con datos que ya están disponibles en el propio <em>R</em> (es el de <code>mtcars</code>), pero ahora como si fueran externos. Para ello extraeremos los valores desde un archivo de texto en formato <em>csv</em> y mostraremos un breve resumen del mismo con la función <code>head()</code>. Dicho archivo se encuentra en la carpeta de Datasets del repositorio.</p>
+<p>Trabajaremos con datos que ya están disponibles en el propio <em>R</em> (es el de <code>mtcars</code>), pero ahora como si fueran externos. Para ello extraeremos los valores desde un archivo de texto en formato <em>csv</em> y mostraremos un breve resumen del mismo con la función <code>head()</code> con dos argumentos, el nombre de la variable y el número de filas que deseamos mostrar. Dicho archivo se encuentra en la carpeta de Datasets del repositorio.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>autos <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="at">file =</span> <span class="st">"Datasets/auto-mpg.csv"</span>, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">","</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(autos)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>autos <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="at">file =</span> <span class="st">"Datasets/Adquisition/auto-mpg.csv"</span>, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">","</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(autos, <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  No mpg cylinders displacement horsepower weight acceleration model_year
 1  1  28         4          140         90   2264         15.5         71
@@ -192,22 +196,149 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 3  3  36         4          107         75   2205         14.5         82
 4  4  28         4           97         92   2288         17.0         72
 5  5  21         6          199         90   2648         15.0         70
-6  6  23         4          115         95   2694         15.0         75
              car_name
 1 chevrolet vega 2300
 2     mazda rx2 coupe
 3        honda accord
 4     datsun 510 (sw)
-5         amc gremlin
-6          audi 100ls</code></pre>
+5         amc gremlin</code></pre>
 </div>
 </div>
 <p>La función que utilizamos <code>read.csv()</code> admite algunos parámetros. Los que nos importan de momento son los que se pueden ver en el bloque de código anterior:</p>
 <ol type="1">
 <li><code>file =</code>. El archivo que se va a leer entrecomillado.</li>
-<li><code>header =</code>. Si el archivo contiene cabecera, lo dejamos en <code>TRUE</code>.</li>
-<li><code>sep =</code>. El tipo de separador, que usualmente es una coma “<code>,</code>”.</li>
+<li><code>header =</code>. Si el archivo contiene cabecera, lo dejamos con su valor por defecto, <code>TRUE</code>.</li>
+<li><code>sep =</code>. El tipo de separador, que usualmente es una coma “,”.</li>
 </ol>
+<p>Si deseamos visualizar únicamente los nombres de las variables o columnas, utilizamos el comando:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(autos)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "No"           "mpg"          "cylinders"    "displacement" "horsepower"  
+[6] "weight"       "acceleration" "model_year"   "car_name"    </code></pre>
+</div>
+</div>
+<section id="opciones-adicionales" class="level3">
+<h3 class="anchored" data-anchor-id="opciones-adicionales">Opciones adicionales</h3>
+<p>Si en dado caso el separador es diferente, por ejemplo <code>";"</code>, utilizamos la función <code>read.csv2()</code>. Cabe mencionar que el separador <em>tabulador</em> puede representarse en <em>R</em> como <code>"t"</code>.</p>
+<p>Si nuestro conjunto de datos no tiene cabecera, hay que indicarlo con <code>header = FALSE</code>. Además, podemos agregar dicha cabecera utilizando el argumento <code>col.names = c("Nombre1", "Nombre2", "NombreTal")</code></p>
+<p>Si nuestro set de datos contiene huecos, es posible darles un tratamiento específico con la sentencia <code>na.strings = ""</code>.</p>
+<p>Si queremos evitar que <em>R</em> trate a las variables categóricas como factores, lo especificamos con la sentencia <code>stringsAsFactors = FALSE</code>. Si queremos trabajarlas como cadenas de caracteres, utilizamos <code>as.character()</code>.</p>
+<p>Si queremos leer un archivo remoto, basta con usar la misma función pero cambiando la ruta por la url del archivo:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>autos_internet <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"https://raw.githubusercontent.com/LuisEMendoza/MachineLearning-R/main/Datasets/auto-mpg.csv"</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(autos_internet, <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  No mpg cylinders displacement horsepower weight acceleration model_year
+1  1  28         4          140         90   2264         15.5         71
+2  2  19         3           70         97   2330         13.5         72
+3  3  36         4          107         75   2205         14.5         82
+4  4  28         4           97         92   2288         17.0         72
+5  5  21         6          199         90   2648         15.0         70
+             car_name
+1 chevrolet vega 2300
+2     mazda rx2 coupe
+3        honda accord
+4     datsun 510 (sw)
+5         amc gremlin</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="extrayendo-un-xml" class="level2">
+<h2 class="anchored" data-anchor-id="extrayendo-un-xml">Extrayendo un <em>xml</em></h2>
+<p>Es necesario instalar un paquete adicional en <em>R</em> llamado <code>XML</code>. Usamos la sentencia de costumbre</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"XML"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Cargamos este paquete con</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(XML)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Y leemos el archivo desde su ubicación local. Por ejemplo, el archivo a leer se encuentra en la ubicación local <code>Datasets/Adquisition/cd_catalog.xml</code>. Por simplicidad, asignaremos la ruta a una variable llamada UrlXml</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>url_xml <span class="ot">&lt;-</span> <span class="st">"Datasets/Adquisition/cd_catalog.xml"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Sin embargo, debemos crear un apuntador que nos permita hurgar en el archivo:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>xml_apuntador <span class="ot">&lt;-</span> <span class="fu">xmlParse</span>(url_xml)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>apuntador_root <span class="ot">&lt;-</span> <span class="fu">xmlRoot</span>(xml_apuntador)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Además de construir un <em>dataframe</em> con el mismo. Procedemos de la siguiente manera:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>xml_data <span class="ot">&lt;-</span> <span class="fu">xmlSApply</span>(apuntador_root, <span class="cf">function</span>(x) <span class="fu">xmlSApply</span>(x, xmlValue))</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>xml_dataframe <span class="ot">&lt;-</span>  <span class="fu">data.frame</span>(<span class="fu">t</span>(xml_data), <span class="at">row.names =</span> <span class="cn">NULL</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Es importante notar que se traspuso el <em>dataframe</em> debido a que la estructura de los <em>xml</em> nos habr[ia generado las variables como filas. Recordemos que siempre deseamos que las variables se encuentren en las columnas. También eliminamos los nombres de las filas con la sentencia <code>row.names = NULL</code>.</p>
+<p>Mostremos el resultado con al menos 5 valores.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(xml_dataframe, <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                TITLE          ARTIST COUNTRY        COMPANY PRICE YEAR
+1    Empire Burlesque       Bob Dylan     USA       Columbia 10.90 1985
+2     Hide your heart    Bonnie Tyler      UK    CBS Records  9.90 1988
+3       Greatest Hits    Dolly Parton     USA            RCA  9.90 1982
+4 Still got the blues      Gary Moore      UK Virgin records 10.20 1990
+5                Eros Eros Ramazzotti      EU            BMG  9.90 1997</code></pre>
+</div>
+</div>
+</section>
+<section id="leyendo-tablas-de-un-html" class="level2">
+<h2 class="anchored" data-anchor-id="leyendo-tablas-de-un-html">Leyendo tablas de un <em>html</em></h2>
+<p>Procedemos de manera similar a los <em>xml</em>. Creamos una variable con la ubicación del archivo:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>url_html <span class="ot">&lt;-</span> <span class="st">"Datasets/Adquisition/WorldPopulation-wiki.htm"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Extraemos las tablas con:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>tablas <span class="ot">&lt;-</span> <span class="fu">readHTMLTable</span>(url_html)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Esto nos devuelve una lista con las tablas incrustadas en el archivo <em>html</em>. Si deseamos acceder a una lista en particular, por ejemplo, la 6; lo hacemos con el siguiente comando en una nueva variable llamada <code>tabla6</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>tabla6 <span class="ot">&lt;-</span> tablas[[<span class="dv">6</span>]]</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(tabla6, <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Rank Country / Territory    Population              Date
+1    1      &nbsp;China[note 4] 1,385,310,000 September 9, 2017
+2    2              &nbsp;India 1,321,010,000 September 9, 2017
+3    3      &nbsp;United States   325,732,000 September 9, 2017
+4    4          &nbsp;Indonesia   261,600,000  October 31, 2016
+5    5           &nbsp;Pakistan   208,848,000 September 9, 2017
+  Approx.&nbsp;% of world\npopulation Source
+1                          18.3%   [91]
+2                          17.5%   [92]
+3                          4.31%   [93]
+4                          3.46%   [94]
+5                          2.76%   [95]</code></pre>
+</div>
+</div>
+<p>Lo anterior se puede realizar un poco mejor si ya conocemos de antemano la tabla a cargar. Veamos:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>nueva_tabla6 <span class="ot">&lt;-</span> <span class="fu">readHTMLTable</span>(url_html, <span class="at">which =</span> <span class="dv">6</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>nueva_tabla6</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Rank Country / Territory    Population              Date
+1     1      &nbsp;China[note 4] 1,385,310,000 September 9, 2017
+2     2              &nbsp;India 1,321,010,000 September 9, 2017
+3     3      &nbsp;United States   325,732,000 September 9, 2017
+4     4          &nbsp;Indonesia   261,600,000  October 31, 2016
+5     5           &nbsp;Pakistan   208,848,000 September 9, 2017
+6     6             &nbsp;Brazil   207,985,000 September 9, 2017
+7     7            &nbsp;Nigeria   188,500,000  October 31, 2016
+8     8         &nbsp;Bangladesh   163,106,000 September 9, 2017
+9     9             &nbsp;Russia   146,773,226      June 1, 2017
+10   10              &nbsp;Japan   126,750,000      July 1, 2017
+   Approx.&nbsp;% of world\npopulation Source
+1                           18.3%   [91]
+2                           17.5%   [92]
+3                           4.31%   [93]
+4                           3.46%   [94]
+5                           2.76%   [95]
+6                           2.75%   [96]
+7                           2.49%   [97]
+8                           2.16%   [98]
+9                           1.94%   [99]
+10                          1.68%  [100]</code></pre>
+</div>
+</div>
 
 
 </section>
