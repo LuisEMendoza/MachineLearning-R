@@ -42,7 +42,7 @@ Si queremos evitar que *R* trate a las variables categóricas como factores, lo 
 Si queremos leer un archivo remoto, basta con usar la misma función pero cambiando la ruta por la url del archivo:
 
 ```{r}
-autos_internet <- read.csv("https://raw.githubusercontent.com/LuisEMendoza/MachineLearning-R/main/Datasets/auto-mpg.csv")
+autos_internet <- read.csv("https://github.com/LuisEMendoza/MachineLearning-R/blob/main/Datasets/Adquisition/auto-mpg.csv")
 head(autos_internet, 5)
 ```
 
@@ -114,4 +114,25 @@ Lo anterior se puede realizar un poco mejor si ya conocemos de antemano la tabla
 ```{r}
 nueva_tabla6 <- readHTMLTable(url_html, which = 6)
 nueva_tabla6
+```
+
+## Leyendo datos desde un *JSON*
+
+Para esta tarea debemos instalar un paquete adicional:
+
+``` R
+install.packages("jsonlite")
+```
+
+Cargamos el paquete:
+
+```{r}
+library(jsonlite)
+```
+
+Y ahora cargamos los conjuntos de datos disponibles a su respectiva variable llamada `json_data1` y `json_data2`:
+
+```{r}
+json_data1 <- fromJSON("Datasets/Adquisition/students.json")
+json_data2 <- fromJSON("Datasets/Adquisition/student-courses.json")
 ```

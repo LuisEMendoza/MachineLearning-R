@@ -226,21 +226,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Si queremos evitar que <em>R</em> trate a las variables categóricas como factores, lo especificamos con la sentencia <code>stringsAsFactors = FALSE</code>. Si queremos trabajarlas como cadenas de caracteres, utilizamos <code>as.character()</code>.</p>
 <p>Si queremos leer un archivo remoto, basta con usar la misma función pero cambiando la ruta por la url del archivo:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>autos_internet <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"https://raw.githubusercontent.com/LuisEMendoza/MachineLearning-R/main/Datasets/auto-mpg.csv"</span>)</span>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>autos_internet <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"https://github.com/LuisEMendoza/MachineLearning-R/blob/main/Datasets/Adquisition/auto-mpg.csv"</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(autos_internet, <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  No mpg cylinders displacement horsepower weight acceleration model_year
-1  1  28         4          140         90   2264         15.5         71
-2  2  19         3           70         97   2330         13.5         72
-3  3  36         4          107         75   2205         14.5         82
-4  4  28         4           97         92   2288         17.0         72
-5  5  21         6          199         90   2648         15.0         70
-             car_name
-1 chevrolet vega 2300
-2     mazda rx2 coupe
-3        honda accord
-4     datsun 510 (sw)
-5         amc gremlin</code></pre>
+<pre><code>                                                                                                  X..DOCTYPE.html.
+1 &lt;html lang=en data-color-mode=auto data-light-theme=light data-dark-theme=dark data-a11y-animated-images=system&gt;
+2                                                                                                           &lt;head&gt;
+3                                                                                             &lt;meta charset=utf-8&gt;
+4                                                     &lt;link rel=dns-prefetch href=https://github.githubassets.com&gt;
+5                                               &lt;link rel=dns-prefetch href=https://avatars.githubusercontent.com&gt;</code></pre>
 </div>
 </div>
 </section>
@@ -338,6 +332,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 9                           1.94%   [99]
 10                          1.68%  [100]</code></pre>
 </div>
+</div>
+</section>
+<section id="leyendo-datos-desde-un-json" class="level2">
+<h2 class="anchored" data-anchor-id="leyendo-datos-desde-un-json">Leyendo datos desde un <em>JSON</em></h2>
+<p>Para esta tarea debemos instalar un paquete adicional:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"jsonlite"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Cargamos el paquete:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(jsonlite)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Y ahora cargamos los conjuntos de datos disponibles a su respectiva variable llamada <code>json_data1</code> y <code>json_data2</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>json_data1 <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(<span class="st">"Datasets/Adquisition/students.json"</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>json_data2 <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(<span class="st">"Datasets/Adquisition/student-courses.json"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 
