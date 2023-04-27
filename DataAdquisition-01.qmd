@@ -4,11 +4,11 @@ format: html
 editor: visual
 ---
 
-## Introducción
+## Introducción {#introducción}
 
 Es importante saber dónde encontrar y preparar los datos. Es posible obtenerlos en archivos *CSV* o *JSON*, pero eso no nos exime de tener que prepararlos o adecuarlos para aplicar algún modelo. Veamos cómo extraer los datos a partir de un *csv*.
 
-## Extrayendo un *csv*
+## Extrayendo un *csv* {#extrayendo-un-csv}
 
 Trabajaremos con datos que ya están disponibles en el propio *R* (es el de `mtcars`), pero ahora como si fueran externos. Para ello extraeremos los valores desde un archivo de texto en formato *csv* y mostraremos un breve resumen del mismo con la función `head()` con dos argumentos, el nombre de la variable y el número de filas que deseamos mostrar. Dicho archivo se encuentra en la carpeta de Datasets del repositorio.
 
@@ -29,7 +29,7 @@ Si deseamos visualizar únicamente los nombres de las variables o columnas, util
 names(autos)
 ```
 
-### Opciones adicionales
+### Opciones adicionales {#opciones-adicionales}
 
 Si en dado caso el separador es diferente, por ejemplo `";"`, utilizamos la función `read.csv2()`. Cabe mencionar que el separador *tabulador* puede representarse en *R* como `"t"`.
 
@@ -46,11 +46,11 @@ autos_internet <- read.csv("https://github.com/LuisEMendoza/MachineLearning-R/bl
 head(autos_internet, 5)
 ```
 
-## Extrayendo un *xml*
+## Extrayendo un *xml* {#extrayendo-un-xml}
 
 Es necesario instalar un paquete adicional en *R* llamado `XML`. Usamos la sentencia de costumbre
 
-``` R
+``` r
 install.packages("XML")
 ```
 
@@ -88,7 +88,7 @@ Mostremos el resultado con al menos 5 valores.
 head(xml_dataframe, 5)
 ```
 
-## Leyendo tablas de un *html*
+## Leyendo tablas de un *html* {#leyendo-tablas-de-un-html}
 
 Procedemos de manera similar a los *xml*. Creamos una variable con la ubicación del archivo:
 
@@ -116,11 +116,11 @@ nueva_tabla6 <- readHTMLTable(url_html, which = 6)
 nueva_tabla6
 ```
 
-## Leyendo datos desde un *JSON*
+## Leyendo datos desde un *JSON* {#leyendo-datos-desde-un-json}
 
 Para esta tarea debemos instalar un paquete adicional:
 
-``` R
+``` r
 install.packages("jsonlite")
 ```
 
@@ -135,4 +135,34 @@ Y ahora cargamos los conjuntos de datos disponibles a su respectiva variable lla
 ```{r}
 json_data1 <- fromJSON("Datasets/Adquisition/students.json")
 json_data2 <- fromJSON("Datasets/Adquisition/student-courses.json")
+```
+
+Mostremos la primera variable
+
+```{r}
+head(json_data1, 5)
+```
+
+Es posible acceder a los diferentes campos mediante la sintaxis del Peso (\$):
+
+```{r}
+json_data1$Name
+```
+
+También utilizando la selección por fila, por columna o ambas. Probemos con las primeras cinco filas y las primeras dos columnas:
+
+```{r}
+json_data1[1:5, 1:2]
+```
+
+Ahora seleccionemos solamente las filas 2, 5 y 8:
+
+```{r}
+json_data1[c(2,5,8),]
+```
+
+Y terminemos trayendo solo las columnas 2 y 5:
+
+```{r}
+json_data1[, c(2,5)]
 ```

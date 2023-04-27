@@ -347,6 +347,68 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>json_data1 <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(<span class="st">"Datasets/Adquisition/students.json"</span>)</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>json_data2 <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(<span class="st">"Datasets/Adquisition/student-courses.json"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>Mostremos la primera variable</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(json_data1, <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    id          Name                Email      Major year
+1 1044   Fran Morton     fran.m@quama.edu Statistics 2015
+2 1035  Kato Mullins      tempor@giat.com  Marketing 2014
+3 1046 Jordan Keller        Cum@gmail.com  Chemistry 2014
+4 1084 Macey Simpson eu@famesacturpis.com    Finance 2016
+5 1010 Deanna Ortega  Dea.Ortega@velit.ca  Chemistry 2016</code></pre>
+</div>
+</div>
+<p>Es posible acceder a los diferentes campos mediante la sintaxis del Peso ($):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>json_data1<span class="sc">$</span>Name</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Fran Morton"     "Kato Mullins"    "Jordan Keller"   "Macey Simpson"  
+ [5] "Deanna Ortega"   "Joe Eaton"       "Yoko Washington" "Ebony Farrell"  
+ [9] "Quinn Delacruz"  "Magee Humphrey"  "Kaitlin Cooper"  "Carson Roy"     </code></pre>
+</div>
+</div>
+<p>También utilizando la selección por fila, por columna o ambas. Probemos con las primeras cinco filas y las primeras dos columnas:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>json_data1[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    id          Name
+1 1044   Fran Morton
+2 1035  Kato Mullins
+3 1046 Jordan Keller
+4 1084 Macey Simpson
+5 1010 Deanna Ortega</code></pre>
+</div>
+</div>
+<p>Ahora seleccionemos solamente las filas 2, 5 y 8:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>json_data1[<span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">8</span>),]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    id          Name                Email     Major year
+2 1035  Kato Mullins      tempor@giat.com Marketing 2014
+5 1010 Deanna Ortega  Dea.Ortega@velit.ca Chemistry 2016
+8 1074 Ebony Farrell efarrella@gravid.com Chemistry 2017</code></pre>
+</div>
+</div>
+<p>Y terminemos trayendo solo las columnas 2 y 5:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>json_data1[, <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">5</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>              Name year
+1      Fran Morton 2015
+2     Kato Mullins 2014
+3    Jordan Keller 2014
+4    Macey Simpson 2016
+5    Deanna Ortega 2016
+6        Joe Eaton 2014
+7  Yoko Washington 2017
+8    Ebony Farrell 2017
+9   Quinn Delacruz 2017
+10  Magee Humphrey 2016
+11  Kaitlin Cooper 2014
+12      Carson Roy 2017</code></pre>
+</div>
+</div>
 
 
 </section>
