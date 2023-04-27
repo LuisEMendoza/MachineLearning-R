@@ -14,7 +14,7 @@ El código R se muestra abajo y enseguida la salida.
 1 + 1
 ```
 
-Conforme se vuelvan más complejos estos apuntes iré agregando métodos más eficientes de navegación.
+Conforme se vuelvan más complejos estos apuntes iré agregando métodos más eficientes de navegación. Edit: ya se agregó una entrada nueva: Adquisición.
 
 Se debe instalar el paquete `class` con
 
